@@ -38,7 +38,8 @@ bool WINAPI IsValidMemoryModuleHandle(HMEMORYMODULE hModule) {
 	return MapMemoryModuleHandle(hModule) != nullptr;
 }
 
-#define AlignValueUp(value, alignment) ((size_t(value) + size_t(alignment) + 1) & ~(size_t(alignment) - 1))
+//AlignValueUp ->0x1000 -> 0x2000, last section error
+//#define AlignValueUp(value, alignment) ((size_t(value) + size_t(alignment) + 1) & ~(size_t(alignment) - 1))
 
 #define OffsetPointer(data, offset) LPVOID(LPBYTE(data) + ptrdiff_t(offset))
 
@@ -159,7 +160,7 @@ NTSTATUS MemorySetSectionProtection(
 
 	for (DWORD i = 0; i < lpNtHeaders->FileHeader.NumberOfSections; ++i, ++section) {
 		LPVOID address = LPBYTE(base) + section->VirtualAddress;
-		SIZE_T size = AlignValueUp(section->Misc.VirtualSize, lpNtHeaders->OptionalHeader.SectionAlignment);
+		SIZE_T size = AlignValueUpNew(section->Misc.VirtualSize, lpNtHeaders->OptionalHeader.SectionAlignment);
 
 		if (section->Characteristics & IMAGE_SCN_MEM_DISCARDABLE && !CorImage) {
 			//
@@ -271,7 +272,7 @@ NTSTATUS MemoryLoadLibrary(
 	//
 	// Allocate memory for image headers
 	//
-	size_t alignedHeadersSize = (DWORD)AlignValueUp(old_header->OptionalHeader.SizeOfHeaders + sizeof(MEMORYMODULE), sysInfo.dwPageSize);
+	size_t alignedHeadersSize = (DWORD)AlignValueUpNew(old_header->OptionalHeader.SizeOfHeaders + sizeof(MEMORYMODULE), sysInfo.dwPageSize);
 	if (!VirtualAlloc(base, alignedHeadersSize, MEM_COMMIT, PAGE_READWRITE)) {
 		VirtualFree(base, 0, MEM_RELEASE);
 		status = STATUS_NO_MEMORY;
@@ -309,7 +310,7 @@ NTSTATUS MemoryLoadLibrary(
 		PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(new_header);
 		for (DWORD i = 0; i < new_header->FileHeader.NumberOfSections; ++i, ++section) {
 
-			DWORD size = AlignValueUp(
+			DWORD size = AlignValueUpNew(
 				section->Misc.VirtualSize,
 				new_header->OptionalHeader.SectionAlignment
 			);

@@ -1,4 +1,6 @@
-# MemoryModulePP
+# MemoryModulePP_VMP
+
+MemoryModulePP_VMP is developed based on MemoryModulePP. Add VMProtect support test.  VMProtect v3.6.0 Options->Memory Protection nead set No.
 
 MemoryModulePP, used to load a DLL from memory. MemoryModulePP is compatible with Win32 API and supports exception handling.
 
@@ -33,10 +35,10 @@ MemoryModulePP uses many open source projects and references to work properly:
 
 
 
-   [ref0]: <https://www.vergiliusproject.com>
-   [ref1]: <https://github.com/fancycode/MemoryModule.git>
-   [ref2]: <https://github.com/DarthTon/Blackbone.git>
-   [ref3]: <https://habr.com/en/company/aladdinrd/blog/321868/>
-   [ref4]: <https://doxygen.reactos.org/>
-   [ref5]: <https://github.com/processhacker/processhacker.git>
-   
+[ref0]: <https://www.vergiliusproject.com>
+[ref1]: <https://github.com/fancycode/MemoryModule.git>
+[ref2]: <https://github.com/DarthTon/Blackbone.git>
+[ref3]: <https://habr.com/en/company/aladdinrd/blog/321868/>
+[ref4]: <https://doxygen.reactos.org/>
+[ref5]: <https://github.com/processhacker/processhacker.git>
+

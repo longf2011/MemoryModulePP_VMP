@@ -471,7 +471,13 @@ BOOLEAN NTAPI RtlIsValidImageBuffer(
 			SizeofImage = headers.nt32->OptionalHeader.SizeOfHeaders;
 			ProbeForRead(sections, headers.nt32->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER));
 			for (WORD i = 0; i < headers.nt32->FileHeader.NumberOfSections; ++i, ++sections)
-				SizeofImage += sections->SizeOfRawData;
+			{
+				//SizeofImage += sections->SizeOfRawData; Nead File Alignment
+				if (i != headers.nt32->FileHeader.NumberOfSections - 1)
+					SizeofImage += AlignValueUpNew(sections->SizeOfRawData, headers.nt32->OptionalHeader.FileAlignment);
+				else
+					SizeofImage += sections->SizeOfRawData;
+			}
 
 			//Signature size
 			SizeofImage += headers.nt32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].Size;
@@ -481,7 +487,13 @@ BOOLEAN NTAPI RtlIsValidImageBuffer(
 			SizeofImage = headers.nt64->OptionalHeader.SizeOfHeaders;
 			ProbeForRead(sections, headers.nt64->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER));
 			for (WORD i = 0; i < headers.nt64->FileHeader.NumberOfSections; ++i, ++sections)
-				SizeofImage += sections->SizeOfRawData;
+			{
+				//SizeofImage += sections->SizeOfRawData;
+				if (i != headers.nt32->FileHeader.NumberOfSections - 1)
+					SizeofImage += AlignValueUpNew(sections->SizeOfRawData, headers.nt64->OptionalHeader.FileAlignment);
+				else
+					SizeofImage += sections->SizeOfRawData;
+			}
 			SizeofImage += headers.nt64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].Size;
 			break;
 		default:
@@ -556,7 +568,7 @@ NTSTATUS NTAPI LdrLoadDllMemoryExW(
 	PLDR_DATA_TABLE_ENTRY ModuleEntry = nullptr;
 	PIMAGE_NT_HEADERS headers = nullptr;
 
-	if (BufferSize)return STATUS_INVALID_PARAMETER_5;
+	//if (BufferSize)return STATUS_INVALID_PARAMETER_5; dwFlags & LOAD_FLAGS_PASS_IMAGE_CHECK->BufferSize=0->MemoryLoadLibrary error
 	__try {
 		*BaseAddress = nullptr;
 		if (LdrEntry)*LdrEntry = nullptr;

@@ -60,6 +60,9 @@ typedef struct _MEMORYMODULE {
 
 #define MEMORY_MODULE_SIGNATURE 0x00aabbcc11ffee00
 
+#define AlignValueUpNew(value, alignment) ( size_t(value)%size_t(alignment)==0?size_t(size_t(value)/size_t(alignment))*size_t(alignment):(size_t(size_t(value)/size_t(alignment))+1)*size_t(alignment))
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
