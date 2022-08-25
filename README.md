@@ -1,6 +1,6 @@
 # MemoryModulePP_VMP
 
-MemoryModulePP_VMP is developed based on MemoryModulePP. Add VMProtect support test.  VMProtect v3.6.0 Options->Memory Protection nead set No.
+MemoryModulePP_VMP is developed based on MemoryModulePP. Add VMProtect support test.  VMProtect v3.6.0 Options->Memory Protection need set No.
 
 MemoryModulePP, used to load a DLL from memory. MemoryModulePP is compatible with Win32 API and supports exception handling.
 
